@@ -1,0 +1,453 @@
+@charset "UTF-8";
+
+/*@import url(css/ol.css);*/
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+
+    /* dashboard-host.css should not have defined cursor as pointer. */
+    cursor: auto;
+}
+html {
+    background-color: #000;
+    color: #FFF;
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    line-height: 1.0;
+}
+@media (min-aspect-ratio: 4/3) {
+    html { font-size: 6vh; }
+}
+@media (max-aspect-ratio: 4/3) {
+    /* This value is the font-size from min-aspect-ratio times 3 divided by 4  */
+    html { font-size: 4.5vw; }
+}
+ul, ol, li, p {
+    margin: 0;
+    padding: 0;
+}
+a {
+    color: inherit;
+}
+
+/* Main layout, divided in 4 regions. */
+.dashboard {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: stretch;
+    -webkit-align-items: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+}
+.dashboard > aside,
+.dashboard > nav,
+.dashboard > footer {
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+}
+.dashboard > div._tabs {
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    position: relative;
+}
+
+/* Top bar shows: speed, gear, fuel, damage, rest, time */
+.dashboard > aside {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-align: stretch;
+    -webkit-align-items: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+}
+.dashboard > aside > div {
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    -webkit-flex-basis: 2em;
+    -ms-flex-preferred-size: 2em;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+    flex-basis: 2em;
+
+    text-align: center;
+    white-space: nowrap;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+}
+.dashboard > aside > div._gear {
+    -webkit-flex-basis: 2.5em;
+    -ms-flex-preferred-size: 2.5em;
+    flex-basis: 2.5em;
+}
+.dashboard > aside > div._speed,
+.dashboard > aside > div._time {
+    -webkit-flex-basis: 5em;
+    -ms-flex-preferred-size: 5em;
+    flex-basis: 5em;
+}
+.dashboard > aside > div._speed {
+    background: #7F0000;
+    background: -webkit-linear-gradient(top, rgba(127,0,0,0) 0%, rgba(255,0,0,0) 50%, rgba(127,0,0,0) 100%);
+    background: linear-gradient(to bottom, rgba(127,0,0,0) 0%, rgba(255,0,0,0) 50%, rgba(127,0,0,0) 100%);
+}
+
+/* The main area. */
+.dashboard > ._tabs > article {
+    display: none;
+}
+.dashboard > ._tabs > article._active_tab {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* Truck, trailer and cargo tab. */
+#_truck > .Meni,
+#_roadinfo > .Meni,
+#_cargo > .noJob,
+#_cargo > .hasJob,
+#_trailer > .noJob,
+#_trailer > .hasJob {
+    height: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+#_truck > .Meni > ._row,
+#_roadinfo > .Meni > ._row,
+#_cargo > .noJob > ._row,
+#_cargo > .hasJob > ._row,
+#_trailer > .noJob > ._row,
+#_trailer > .hasJob > ._row {
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    -webkit-flex-shrink: 1;
+    -ms-flex-negative: 1;
+    flex-shrink: 1;
+}
+
+/* Each row tabs. */
+._row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+._row > * {
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    max-width: 100%;
+}
+._row > *:first-child {
+    text-align: left;
+    padding-left: 1ex;
+}
+._row > *:last-child {
+    text-align: right;
+    padding-right: 1ex;
+}
+
+._point {
+    cursor: pointer;
+}
+
+/* The buttons at the bottom. */
+.dashboard > nav {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-align: stretch;
+    -webkit-align-items: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+}
+.dashboard > nav > * {
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+
+	text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 1.3em;
+    line-height: 1.0;
+
+    padding: 0.2em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+.dashboard > footer {
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* Icons that fill up according to some percentage. */
+.fillingIcon {
+    display: inline-block;
+    position: relative;
+}
+.fillingIcon > .top {
+    position: absolute;
+    overflow: hidden;
+}
+.fillingIcon > .top > *,
+.fillingIcon > .bot > * {
+    display: block;
+}
+
+/* Colors */
+.dashboard > aside {
+    background: #1e1e1e;
+    background: -webkit-linear-gradient(top, #1e1e1e 0%, #505050 50%, #1e1e1e 100%);
+    background: linear-gradient(to bottom, #1e1e1e 0%, #505050 50%, #1e1e1e 100%);
+}
+*.dashboard > aside > div._middle {
+    background: #181818;
+    background: -webkit-linear-gradient(top, #181818 0%, #404040 50%, #181818 0%);
+    background: linear-gradient(to bottom, #181818 0%, #404040 50%, #181818 100%);
+}
+.dashboard > nav {
+    background: #2c2c2c;
+    background: -webkit-linear-gradient(top, #2c2c2c 0%, #535353 50%, #2c2c2c 100%);
+    background: linear-gradient(to bottom, #2c2c2c 0%, #535353 50%, #2c2c2c 100%);
+}
+.dashboard > ._tabs {
+    background-image: url("img/bg.png");
+    background-size: 0.4em;  /* Single-value means background width. */
+}
+.dashboard > nav > * {
+    border-bottom: solid 0.1em transparent;
+}
+.dashboard > nav > *._active_tab_button {
+    border-bottom-color: orange;
+    background-color: rgba(0, 0, 0, 0.3333);
+}
+._yellow-color {
+    color: #FB9912;
+}
+#_cargo ._row:first-child {
+    background-color: #373737;
+}
+#_truck ._row:first-child {
+    background-color: #373737;
+}
+#_trailer ._row:first-child {
+    background-color: #373737;
+}
+#_roadinfo ._row:first-child {
+    background-color: #373737;
+}
+._row:nth-child(even) {
+    background-color: rgba(127,127,127,0.25);
+}
+
+/* Modal messages*/
+.modal,
+.modal2,
+.modal3 {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    padding-top: 100px; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.4); 
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    animation-duration: 0.4s;
+	background-image: url("img/bg.png");
+    background-size: 0.4em;
+}
+
+.modal-header {
+    padding: 3px 11px;
+    background-color: #373737;
+    color: #FB9912;
+}
+
+.modal-body {padding: 3px 0px;}
+
+.modal-footer {
+    padding: 3px 16px;
+    background-color: #373737;
+    color: #FB9912;
+}
+
+.modal-bodychange {
+	padding: 3px 0px;
+}
+
+/* Overlay message. */
+#_overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+#_overlay > .statusMessage {
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    padding: 1em;
+    border: 0.2em white solid;
+    border-radius: 0.5em;
+    background: black;
+    color: white;
+}
+
+.road-sign {
+	display: block;
+	position: absolute;
+	left: 48%;
+	width: 26px;
+	height: 26px;
+	background-color: #FFFFFF;
+	border: 5px solid #EE0000;
+	border-radius: 100px;
+  
+}  
+.speed-limit {
+	text-align: center;
+	padding-top: 7px;
+	margin: auto; 
+	color: #000000;
+	font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+}
+
+.checkWoT {
+	visibility: visible;
+}
+
+.isEts2[data-value="false"] {
+    display: none;
+}
+
+.isEts2[data-value="true"] {
+    display: block;
+}
+
+.isAts[data-value="false"] {
+    display: none;
+}
+
+.isAts[data-value="true"] {
+    display: block;
+}
