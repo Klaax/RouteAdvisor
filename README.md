@@ -2,7 +2,7 @@
 Euro Truck Simulator 2 / American Truck Simulator's Route Advisor, for mobile devices. This is a skin for funbit's [ETS2 Telemetry Server](https://github.com/Funbit/ets2-telemetry-server).
 
 ## Features
-The Route Advisor includes some features that Euro Truck Simulator 2 / American Truck Simulator's Route Advisor currently has. These features are:
+The Route Advisor includes some features that Euro Truck Simulator 2 / American Truck Simulator's Route Advisor currently has. It's slightly edited to display useful informations. These features are:
 
 - Truck information
     - Truck model
@@ -44,4 +44,3 @@ The Route Advisor includes some features that Euro Truck Simulator 2 / American 
 
 ## Languages
 A list of supported languages are available on the wiki page. If you would like to submit a translation, please submit a pull request.
-8
