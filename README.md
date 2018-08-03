@@ -29,7 +29,9 @@ The Route Advisor includes some features that Euro Truck Simulator 2 / American 
 - Warning and info pop-up messages (parking brake engaged, low fuel...)
 
 * GPS will show the distance to the marked location.
+
 ** If pressed, a detailed view of the truck damage will be shown (engine, transmission, cabin, chassis and wheels).
+
 *** Only works if the `isMultiplayer` parameter is set to `true`.
 
 ## Requirements
