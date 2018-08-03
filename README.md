@@ -32,11 +32,11 @@ The Route Advisor includes some features that Euro Truck Simulator 2 / American 
 
 ( ** ) If pressed, a detailed view of the truck damage will be shown (engine, transmission, cabin, chassis and wheels).
 
-( *** ) Only works if the `isMultiplayer` parameter is set to `true`.
+( *** ) Only shows if the `isMultiplayer` parameter is set to `true`.
 
 ## Requirements
 - Euro Truck Simulator 2 and/or American Truck Simulator
-- [ETS2 Telemetry Server](https://github.com/Funbit/ets2-telemetry-server) 3.2.3 or later
+- [ETS2 Telemetry Server](https://github.com/Funbit/ets2-telemetry-server) 3.2.5.
 
 ## How to Install
 1. Download the latest version of the Route Advisor from the [releases page](https://www.github.com/Klaax/RouteAdvisor/releases).
