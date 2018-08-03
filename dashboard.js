@@ -589,15 +589,10 @@ function processDomChanges(data) {
 	
 	//Process tab for MP
 	var truckMP = g_skinConfig.isMultiplayer;
-	if(data.isEts2) {
-		if(truckMP == true) {
-			$("div.MP").css("display", "inline");
-		}
-		else if(truckMP == false) {
-			$("div.MP").css("display", "none");
-		}
+	if(truckMP == true) {
+		$("div.MP").css("display", "inline");
 	}
-	else {
+	else if(truckMP == false) {
 		$("div.MP").css("display", "none");
 	}
     g_processedDomChanges = true;
