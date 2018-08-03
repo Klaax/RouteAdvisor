@@ -44,3 +44,15 @@ The Route Advisor includes some features that Euro Truck Simulator 2 / American 
 
 ## Languages
 A list of supported languages are available on the wiki page. If you would like to submit a translation, please submit a pull request.
+
+## Screenshots
+![Truck Information](screenshots/truck.jpg)
+![Trailer Information](screenshots/trailer.jpg)
+![CJ Information](screenshots/currentjob.jpg)
+![Trailer NJ Information](screenshots/trailernj.jpg)
+![CJ NJ Information](screenshots/currentjobnj.jpg)
+![TruckGPS Information](screenshots/truck2.jpg)
+![Damage Report](screenshots/damagereport.jpg)
+![Parking Brake](screenshots/parkingbrake.jpg)
+![Low Fuel](screenshots/lowfuel.jpg)
+![TrucksMP](screenshots/truckmp.jpg)
