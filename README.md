@@ -27,8 +27,9 @@ The Route Advisor includes some features that Euro Truck Simulator 2 / American 
 - [ETS2 Telemetry Server](https://github.com/Funbit/ets2-telemetry-server) 3.2.3 or later
 
 ## How to Install
-1. Download the latest version of the Route Advisor from the [releases page](https://www.github.com/Klaax/Route-Advisor/releases).
+1. Download the latest version of the Route Advisor from the [releases page](https://www.github.com/Klaax/RouteAdvisor/releases).
 2. Extract the contents of the zip to the ETS2 Telemetry Server's `/server/Html/skins` directory. You should then have a folder named `RouteAdvisor` in the `skins` directory.
 
 ## Languages
 A list of supported languages are available on the wiki page. If you would like to submit a translation, please submit a pull request.
+8
