@@ -49,7 +49,7 @@ A list of supported languages are available on the wiki page. If you would like 
 ## Version history
 - 2.0
    - Updated to [ETS2 Telemetry Server](https://github.com/mike-koch/ets2-telemetry-server/releases/tag/4.0.0) 4.0.0.
-   - Busiest locations tab now have option to change server (just click on tab name)
+   - Busiest locations tab now have the option to change server (just click on tab name)
    - Added short messages tab (currently display only fines)
    - Some design improvements and bug fixes
 
