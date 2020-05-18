@@ -22,9 +22,10 @@
         "width": -1,
         "height": -1,
 
-        "language": "Eng.json",
+        "language": "Srb.json",
         "timeFormat": "24h",
 		"isMultiplayer": true,
+		"mpServer": "sim1",
 		"ets2": {
             "distanceUnits": "km",
             "weightUnits": "t",

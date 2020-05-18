@@ -9,7 +9,7 @@
 // For example, you may convert km/h to mph, kilograms to tons, etc.
 // "data" object is an instance of the Ets2TelemetryData class
 // defined in dashboard-core.ts (or see JSON response in the server's API).
-
+var sMsgT;
 Funbit.Ets.Telemetry.Dashboard.prototype.filter = function (data) {
     // If the game isn't connected, don't both calculating anything.
     if (!data.game.connected) {
@@ -30,23 +30,61 @@ Funbit.Ets.Telemetry.Dashboard.prototype.filter = function (data) {
         : Math.round(data.truck.speed));
     data.truckSpeedMph = data.truck.speed * 0.621371;
     data.truckSpeedMphRounded = Math.abs(Math.floor(data.truckSpeedMph));
+	if(data.finedEvent.fined == true && data.tollgateEvent.tollgateUsed == false)
+	{
+		showTab('_mailinfo');
+		var fineType = data.finedEvent.fineOffense;
+		if(fineType.localeCompare("crash") == 0) {
+			fineType = fineType.replace("crash", g_translations.CrashT);
+		}
+		else if(fineType.localeCompare("avoid_sleeping") == 0) {
+			fineType = fineType.replace("avoid_sleeping", g_translations.AvoidSleepT);
+		}
+		else if(fineType.localeCompare("wrong_way") == 0) {
+			fineType = fineType.replace("wrong_way", g_translations.WrongWayT);
+		}
+		else if(fineType.localeCompare("speeding_camera") == 0) {
+			fineType = fineType.replace("speeding_camera", g_translations.SpeedingCameraT);
+		}
+		else if(fineType.localeCompare("no_lights") == 0) {
+			fineType = fineType.replace("no_lights", g_translations.NoLightsT);
+		}
+		else if(fineType.localeCompare("red_signal") == 0) {
+			fineType = fineType.replace("red_signal", g_translations.RedSignalT);
+		}
+		else if(fineType.localeCompare("speeding") == 0) {
+			fineType = fineType.replace("speeding", g_translations.SpeedingT);
+		}
+		else if(fineType.localeCompare("illegal_trailer") == 0) {
+			fineType = fineType.replace("illegal_trailer", g_translations.IllegalTrailerT);		
+		}
+		$('[data-tra="MailT"]').text(fineType);
+		$('[data-tra="MailT2"]').text("-" + data.finedEvent.fineAmount + " $");
+		sMsgT = setTimeout(function(){ resetMsg(data); }, 3000);
+	}
+	else if(data.tollgateEvent.tollgateUsed == true && data.finedEvent.fined == false)
+	{
+		showTab('_mailinfo');
+		$('[data-tra="MailT"]').text(g_translations.TollgateT);
+		$('[data-tra="MailT2"]').text("-" + data.tollgateEvent.payAmount + " $");
+		sMsgT = setTimeout(function(){ resetMsg(data); }, 3000);
+	}
 	
 	var distanceUnits = g_skinConfig[g_configPrefix].distanceUnits;
 	if (data.truck.cruiseControlOn && distanceUnits === 'mi') {
 		data.truck.cruiseControlSpeed = Math.round(data.truck.cruiseControlSpeed * .621371);
 	}
-	
+
 	if (data.truck.shifterType === "automatic" || data.truck.shifterType === "arcade") {
 		data.gear = data.truck.displayedGear > 0 ? 'A' + data.truck.displayedGear : (data.truck.displayedGear < 0 ? 'R' + Math.abs(data.truck.displayedGear) : 'N');
 	} else {
 		data.gear = data.truck.displayedGear > 0 ? data.truck.displayedGear : (data.truck.displayedGear < 0 ? 'R' + Math.abs(data.truck.displayedGear) : 'N');
 	}
 	data.truck.fuel = data.truck.fuel.toFixed(1);
-	data.truck.fuelEco = 0;
 	data.truck.fuelWarningFactor = data.truck.fuelWarningFactor.toFixed(2);
 	var mod1=0;
 	var mod2=0;
-	//var snd1 = document.getElementById("ParkingBrakeBeep");   
+	//var snd1 = document.getElementById("ParkingBrakeBeep");
 	//var snd2 = document.getElementById("LowFuelBeep");
 	if(data.truck.engineOn) {
 		if(data.truck.parkBrakeOn == true && data.truck.gameThrottle > 0.1) {
@@ -74,7 +112,7 @@ Funbit.Ets.Telemetry.Dashboard.prototype.filter = function (data) {
 				data.truck.FuelInfo = g_translations.FuelLow;
 				data.truck.FuelInfo2 = g_translations.FuelLow2;
 				$(".modal2").css("display", "block");
-				$(".modal").css("display", "none");	 	
+				$(".modal").css("display", "none");
 				//snd2.play();
 			}
 		}
@@ -93,30 +131,53 @@ Funbit.Ets.Telemetry.Dashboard.prototype.filter = function (data) {
     data.truck.w4 = Math.floor(data.truck.wearCabin * 100) + '%';
     data.truck.w5 = Math.floor(data.truck.wearWheels * 100) + '%';
 	
+	var connectedTrailers = 0;
+    var trailersWearChassis = 0;
+    var trailersWearWheels = 0;
+    for (var i = 1; i <= data.game.maxTrailerCount; i++) {
+        if (data['trailer' + i].present) {
+            connectedTrailers++;
+            trailersWearChassis += data['trailer' + i].wearChassis * 100;
+            trailersWearWheels += data['trailer' + i].wearWheels * 100;
+        }
+    }
+    data.trailer1.w1 = Math.floor(trailersWearChassis / connectedTrailers) + '%';
+    data.trailer1.w2  = Math.floor(trailersWearWheels / connectedTrailers) + '%';
+	
+	//data.trailer1.w1 = Math.floor(data.trailer1.wearChassis * 100) + '%';
+	//data.trailer1.w2 = Math.floor(data.trailer1.wearWheels * 100) + '%';
+	
+	data.truck.licensePlate = ' ( ' + data.truck.licensePlate + ' )';
+	if(data.trailer1.attached == true)
+		data.trailer1.licensePlate = ' ( ' + data.trailer1.licensePlate + ' )';
+	else data.trailer1.licensePlate = " ";
+
 	data.truck.fuelAverageConsumption = data.truck.fuelAverageConsumption.toFixed(3);
     data.currentFuelPercentage = (data.truck.fuel / data.truck.fuelCapacity) * 100;
 	data.truck.odometer = data.truck.odometer.toFixed(1) + ' km';
     data.scsTruckDamage = getDamagePercentage(data);
     data.scsTruckDamageRounded = Math.floor(data.scsTruckDamage) + ' %';
-    data.wearTrailerRounded = Math.floor(data.trailer.wear * 100) + ' %';
+    data.scsTrailerDamage = getTrailerDamagePercentage(data);
+    data.scsTrailerDamageRounded = Math.floor(data.scsTrailerDamage) + ' %';
+    data.cargo.damage = data.cargo.cargoLoaded ? Math.floor(data.cargo.damage * 100) + '%' : '';
     data.gameTime12h = getTime(data.game.time, 12);
     var originalTime = data.game.time;
     data.game.time = getTime(data.game.time, 24);
-    var tons = (data.trailer.mass / 1000.0).toFixed(2);
+    var tons = (data.cargo.mass / 1000.0).toFixed(2);
     if (tons.substr(tons.length - 2) === "00") {
         tons = parseInt(tons);
     }
-    data.trailerMassTons = data.trailer.attached ? (tons + ' t') : '';
-    data.trailerMassKg = data.trailer.attached ? data.trailer.mass + ' kg' : '';
-    data.trailerMassLbs = data.trailer.attached ? Math.round(data.trailer.mass * 2.20462) + ' lb' : '';
+    data.cargoMassTons = data.cargo.cargoLoaded ? (tons + ' t') : '';
+    data.cargoMassKg = data.cargo.cargoLoaded ? data.cargo.mass + ' kg' : '';
+    data.cargoMassLbs = data.cargo.cargoLoaded ? Math.round(data.cargo.mass * 2.20462) + ' lb' : '';
     data.game.nextRestStopTimeArray = getDaysHoursMinutesAndSeconds(data.game.nextRestStopTime);
     data.game.nextRestStopTime = processTimeDifferenceArray(data.game.nextRestStopTimeArray);
     data.navigation.speedLimitMph = data.navigation.speedLimit * .621371;
     data.navigation.speedLimitMphRounded = Math.round(data.navigation.speedLimitMph);
     data.navigation.estimatedDistanceKm = ((data.navigation.estimatedDistance / 1000).toFixed(1)) + ' km';
-	if (data.trailer.attached || data.navigation.estimatedDistance == 0) {
-		data.navigation.estimatedDistanceKmGPS = '<br />';	
-		$('[data-tra="GPS"]').text("");		
+	if (data.navigation.estimatedDistance == 0) {
+		data.navigation.estimatedDistanceKmGPS = '<br />';
+		$('[data-tra="GPS"]').text("");
 	}
 	else
 	{
@@ -170,6 +231,7 @@ Funbit.Ets.Telemetry.Dashboard.prototype.filter = function (data) {
 				document.getElementById("CCimgT1").src = g_pathPrefix + '/flags/' + CountryCode + '.png';
 				document.getElementById("CCimgT2").src = g_pathPrefix + '/flags/' + CountryCode + '.png';
 				document.getElementById("CCimgRI").src = g_pathPrefix + '/flags/' + CountryCode + '.png';
+				document.getElementById("CCimgMI").src = g_pathPrefix + '/flags/' + CountryCode + '.png';
 				break;
 			}
 			else {
@@ -180,6 +242,7 @@ Funbit.Ets.Telemetry.Dashboard.prototype.filter = function (data) {
 				document.getElementById("CCimgT1").src = g_pathPrefix + '/flags/empti.png';
 				document.getElementById("CCimgT2").src = g_pathPrefix + '/flags/empti.png';
 				document.getElementById("CCimgRI").src = g_pathPrefix + '/flags/empti.png';
+				document.getElementById("CCimgMI").src = g_pathPrefix + '/flags/empti.png';
 			}
 		}
 	}
@@ -191,10 +254,10 @@ Funbit.Ets.Telemetry.Dashboard.prototype.filter = function (data) {
 		document.getElementById("CCimgT1").src = g_pathPrefix + '/flags/empti.png';
 		document.getElementById("CCimgT2").src = g_pathPrefix + '/flags/empti.png';
 		document.getElementById("CCimgRI").src = g_pathPrefix + '/flags/empti.png';
+		document.getElementById("CCimgMI").src = g_pathPrefix + '/flags/empti.png';
 	}
 	
     // return changed data to the core for rendering
-	
     return data;
 };
 
@@ -227,7 +290,7 @@ Funbit.Ets.Telemetry.Dashboard.prototype.render = function (data) {
     } else {
         $('#_overlay').show();
     }
-	
+
 	/*if (data.truck.cruiseControlOn) {
 		$('.cruiseControl').show();
 		$('.noCruiseControl').hide();
@@ -239,7 +302,7 @@ Funbit.Ets.Telemetry.Dashboard.prototype.render = function (data) {
 	}*/
 
     // Process DOM for job
-    if (data.trailer.attached) {
+    if (data.job.jobMarket !== '') {
         $('.hasJob').show();
         $('.noJob').hide();
     } else {
@@ -258,7 +321,7 @@ Funbit.Ets.Telemetry.Dashboard.prototype.render = function (data) {
 
     // Set skin to World of Trucks mode if this is a World of Trucks contract
     if (data.isWorldOfTrucksContract) {
-        $('[data-tra="Remains"]').text(g_translations.WorldOfTrucksContract);     
+        $('[data-tra="Remains"]').text(g_translations.WorldOfTrucksContract);
         $('[data-tra="Remains"]').css('color', '#0CAFF0');
 		$('p.checkWoT').css('visibility', 'hidden');
 
@@ -273,7 +336,7 @@ Funbit.Ets.Telemetry.Dashboard.prototype.render = function (data) {
 
     // Update red bar if speeding
     //updateSpeedIndicator(data.navigation.speedLimit, data.truck.speed);
-	
+
     return data;
 }
 
@@ -306,7 +369,6 @@ Funbit.Ets.Telemetry.Dashboard.prototype.initialize = function (skinConfig) {
     removeLocalStorageItem('currentTab');
     showTab(tabToShow);
 }
-
 function getDaysHoursMinutesAndSeconds(time) {
     var dateTime = new Date(time);
     var days = dateTime.getUTCDay();
@@ -490,6 +552,12 @@ function getDamagePercentage(data) {
                     data.truck.wearWheels) * 100;
 }
 
+function getTrailerDamagePercentage(data) {
+    // Return the max value of all damage percentages.
+    return Math.max(data.trailer1.wearWheels,
+                    data.trailer1.wearChassis) * 100;
+}
+
 function showTab(tabName) {
     $('._active_tab').removeClass('_active_tab');
     $('#' + tabName).addClass('_active_tab');
@@ -497,10 +565,8 @@ function showTab(tabName) {
     $('._active_tab_button').removeClass('_active_tab_button');
     $('#' + tabName + '_button').addClass('_active_tab_button');
 	if(tabName = '_roadinfo') {
-		isRoadInfoTab = true;
 		getTraffic();
 	}
-	else isRoadInfoTab = false;
 }
 
 /** Returns the difference between two dates in ISO 8601 format in an [hour, minutes] array */
@@ -572,11 +638,11 @@ function processDomChanges(data) {
     // Process kg vs tons
     var weightUnits = g_skinConfig[g_configPrefix].weightUnits;
     if (weightUnits === 'kg') {
-        $('.trailerMassKgOrT').addClass('trailerMassKg').removeClass('trailerMassKgOrT');
+        $('.cargoMassKgOrT').addClass('cargoMassKg').removeClass('cargoMassKgOrT');
     } else if (weightUnits === 't') {
-        $('.trailerMassKgOrT').addClass('trailerMassTons').removeClass('trailerMassKgOrT');
+        $('.cargoMassKgOrT').addClass('cargoMassTons').removeClass('cargoMassKgOrT');
     } else if (weightUnits === 'lb') {
-        $('.trailerMassKgOrT').addClass('trailerMassLbs').removeClass('trailerMassKgOrT');
+        $('.cargoMassKgOrT').addClass('cargoMassLbs').removeClass('cargoMassKgOrT');
     }
 
     // Process 12 vs 24 hr time
@@ -586,7 +652,7 @@ function processDomChanges(data) {
         $('.job-deadlineTime').addClass('jobDeadlineTime12h').removeClass('job-deadlineTime');
         $('.navigation-estimatedTime').addClass('navigation-estimatedTime12h').removeClass('navigation-estimatedTime');
     }
-	
+
 	//Process tab for MP
 	var truckMP = g_skinConfig.isMultiplayer;
 	if(truckMP == true) {
@@ -601,7 +667,7 @@ function processDomChanges(data) {
 /*function updateSpeedIndicator(speedLimit, currentSpeed) {
     /*
      The game starts the red indication at 1 km/h over, and stays a solid red at 8 km/h over (...I think).
-    
+
     var MAX_SPEED_FOR_FULL_RED = 8;
     var difference = parseInt(currentSpeed) - speedLimit;
     var opacity = 0;
@@ -635,8 +701,19 @@ function diagnostic()
 	$(".modal3").css("display", "block");
 	$(".modal-body").css("display", "block");
 	$(".modal-bodychange").css("display", "none");
+	$(".modal-bodychangetr").css("display", "none");
 	var tajmer;
-	tajmer = setTimeout(wearCheck, 1500);	
+	tajmer = setTimeout(wearCheck, 1500);
+}
+
+function diagnostictr()
+{
+	$(".modal3").css("display", "block");
+	$(".modal-body").css("display", "block");
+	$(".modal-bodychangetr").css("display", "none");
+	$(".modal-bodychange").css("display", "none");
+	var tajmer;
+	tajmer = setTimeout(wearCheck2, 1500);
 }
 
 function wearCheck()
@@ -644,17 +721,43 @@ function wearCheck()
 	$(".modal-body").css("display", "none");
 	$(".modal-bodychange").css("display", "block");
 }
+function wearCheck2()
+{
+	$(".modal-body").css("display", "none");
+	$(".modal-bodychangetr").css("display", "block");
+}
 
 function closeDiagnostics()
 {
 	$(".modal-body").css("display", "block");
 	$(".modal3").css("display", "none");
+	$(".modal4").css("display", "none");
+}
+
+function changeServer()
+{
+	$(".modal4").css("display", "block");
+	$(".modal-body").css("display", "block");
+}
+function server(i)
+{
+	g_skinConfig.mpServer = "sim" + i;
+	getTraffic();
+}
+
+function resetMsg(data)
+{
+	$('[data-tra="MailT"]').text(g_translations.MailT);
+	$('[data-tra="MailT2"]').text(" ");
+	clearTimeout(sMsgT);
 }
 
 function getTraffic()
 {
 	var i = 0;
-	fetch( 'https://api.truckyapp.com/v2/traffic/top?server=eu2&game=ets2', { 
+	var srv = g_skinConfig.mpServer;
+	var mpSrv = "https://api.truckyapp.com/v2/traffic/top?server="+ srv + "&game=ets2";
+	fetch( mpSrv, {
 		method: 'get'
 	}).then((resp) => resp.json()).then( function(traffic) {
 		console.log("success");
@@ -672,19 +775,23 @@ function getTraffic()
 		}
 		if(sevType.localeCompare("Heavy") == 0) {
 			sevType = sevType.replace("Heavy", g_translations.HeavyT);
-			sevType = sevType.fontcolor("#ff0000");
+			sevType = sevType.fontcolor(traffic.response[i].color);
 		}
 		else if(sevType.localeCompare("Low") == 0) {
-			sevType = sevType.replace("Low", g_translations.LowT); 
-			sevType = sevType.fontcolor("#84ca50");
+			sevType = sevType.replace("Low", g_translations.LowT);
+			sevType = sevType.fontcolor(traffic.response[i].color);
+		}
+		else if(sevType.localeCompare("Fluid") == 0) {
+			sevType = sevType.replace("Fluid", g_translations.FluidT);
+			sevType = sevType.fontcolor(traffic.response[i].color);
 		}
 		else if(sevType.localeCompare("Moderate") == 0) {
 			sevType = sevType.replace("Moderate", g_translations.ModerateT);
-			sevType = sevType.fontcolor("#fb9912");
+			sevType = sevType.fontcolor(traffic.response[i].color);
 		}
 		else if(sevType.localeCompare("Congested") == 0) {
 			sevType = sevType.replace("Congested", g_translations.CongestedT);
-			sevType = sevType.fontcolor("#b71515");
+			sevType = sevType.fontcolor(traffic.response[i].color);
 		}
 		document.getElementById("traffic"+i).innerHTML = strType;
 		document.getElementById("ptraffic"+i).innerHTML = sevType + " (" + traffic.response[i].players + ")";
@@ -781,7 +888,7 @@ var city = [
 [12411.8, -1606.27, "Dresden", "ger"],
 [-13113.6, -6370.93, "Duisberg", "ger"],
 [-13377.2, -4399.6, "Düsseldorf", "ger"],
-[-44900.7, -47219.7, "Edinburgh", "uk"], 
+[-44900.7, -47219.7, "Edinburgh", "uk"],
 [2436.19, -1733.77, "Erfurt", "ger"],
 [-4699.43, -27555.9, "Esbjerg", "den"],
 [-31664.6, -13837.2, "Felixstowe", "uk"],

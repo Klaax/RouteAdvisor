@@ -1,5 +1,5 @@
 # Route Advisor
-Euro Truck Simulator 2 / American Truck Simulator's Route Advisor, for mobile devices. This is a skin for funbit's [ETS2 Telemetry Server](https://github.com/Funbit/ets2-telemetry-server).
+Euro Truck Simulator 2 / American Truck Simulator's Route Advisor, for mobile devices. This is a skin for [ETS2 Telemetry Server](https://github.com/mike-koch/ets2-telemetry-server/releases/tag/4.0.0).
 
 ## Features
 The Route Advisor includes some features that Euro Truck Simulator 2 / American Truck Simulator's Route Advisor currently has. It's slightly edited to display useful informations. These features are:
@@ -13,7 +13,7 @@ The Route Advisor includes some features that Euro Truck Simulator 2 / American 
 - Trailer informarion
     - Cargo name
     - Cargo mass
-    - Trailer wear
+    - Trailer wear ** 
     - Next rest stop time (no job)
 - Current job information
     - Source city and company
@@ -23,6 +23,7 @@ The Route Advisor includes some features that Euro Truck Simulator 2 / American 
     - Payout
     - Next rest stop time (no job)
 - Busiest locations (TrucksMP) ***
+- Short messages tab (Fine and tollgate events) 
 - Current day and time
 - Nearest city
 - Speed limit
@@ -30,13 +31,13 @@ The Route Advisor includes some features that Euro Truck Simulator 2 / American 
 
 ( * ) GPS will show the distance to the marked location.
 
-( ** ) If pressed, a detailed view of the truck damage will be shown (engine, transmission, cabin, chassis and wheels).
+( ** ) If pressed, a detailed view of the truck/trailer damage will be shown (engine, transmission, cabin (for truck), chassis and wheels (for both)).
 
 ( *** ) Only shows if the `isMultiplayer` parameter is set to `true`.
 
 ## Requirements
 - Euro Truck Simulator 2 and/or American Truck Simulator
-- [ETS2 Telemetry Server](https://github.com/Funbit/ets2-telemetry-server) 3.2.5.
+- [ETS2 Telemetry Server](https://github.com/mike-koch/ets2-telemetry-server/releases/tag/4.0.0) 4.0.0.
 
 ## How to Install
 1. Download the latest version of the Route Advisor from the [releases page](https://www.github.com/Klaax/RouteAdvisor/releases).
@@ -44,6 +45,16 @@ The Route Advisor includes some features that Euro Truck Simulator 2 / American 
 
 ## Languages
 A list of supported languages are available on the wiki page. If you would like to submit a translation, please submit a pull request.
+
+## Version history
+- 2.0
+   - Updated to [ETS2 Telemetry Server](https://github.com/mike-koch/ets2-telemetry-server/releases/tag/4.0.0) 4.0.0.
+   - Busiest locations tab now have option to change server (just click on tab name)
+   - Added short messages tab (currently display only fines)
+   - Some design improvements and bug fixes
+
+- 1.0
+   - initial version of Route Advisor
 
 ## Screenshots
 ![Truck Information](screenshots/truck.jpg)

@@ -144,6 +144,7 @@ a {
 /* Truck, trailer and cargo tab. */
 #_truck > .Meni,
 #_roadinfo > .Meni,
+#_mailinfo > .Meni,
 #_cargo > .noJob,
 #_cargo > .hasJob,
 #_trailer > .noJob,
@@ -161,6 +162,7 @@ a {
 }
 #_truck > .Meni > ._row,
 #_roadinfo > .Meni > ._row,
+#_mailinfo > .Meni > ._row,
 #_cargo > .noJob > ._row,
 #_cargo > .hasJob > ._row,
 #_trailer > .noJob > ._row,
@@ -323,6 +325,9 @@ a {
 #_roadinfo ._row:first-child {
     background-color: #373737;
 }
+#_mailinfo ._row:first-child {
+    background-color: #373737;
+}
 ._row:nth-child(even) {
     background-color: rgba(127,127,127,0.25);
 }
@@ -330,7 +335,8 @@ a {
 /* Modal messages*/
 .modal,
 .modal2,
-.modal3 {
+.modal3,
+.modal4 {
     display: none; 
     position: fixed; 
     z-index: 1; 
@@ -371,7 +377,8 @@ a {
     color: #FB9912;
 }
 
-.modal-bodychange {
+.modal-bodychange,
+.modal-bodychangetr {
 	padding: 3px 0px;
 }
 
